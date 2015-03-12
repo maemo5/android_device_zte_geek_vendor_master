@@ -1,0 +1,24 @@
+#!/system/bin/sh
+
+# Depending on Hardware (VV or PR board), NVRAM is different to follow the hardware.
+NVRAM_REV="$(getprop ro.spid.wifi.nvram)"
+if [ -z "${NVRAM_REV}" ]
+then
+NVRAM_REV='vv'
+fi
+
+# These hardcoded path for firmware and nvram are also defined in
+# WifiBoardConfig.mk. Make sure to change at both places...
+BCM4334_FLAGS="firmware_path=/system/etc/firmware/fw_bcmdhd_43341.bin nvram_path=/system/etc/wifi/bcmdhd_43341.cal"
+BCM4335_FLAGS='firmware_path=/system/etc/firmware/fw_bcmdhd_4335.bin nvram_path=/system/etc/wifi/bcmdhd_4335.cal'
+
+setprop wlan.bcm.chip 4334
+
+# Here we trry to insmod the bcm4334 driver. Depending on how the driver has
+# been compiled, it might fail directly here if the chip is bcm4335, in which
+# case we then insmod the bcm4335 driver.
+# If it's been compiled with ENABLE_INSMOD_NO_FW_LOAD, failure will happen when
+# bringin the interface up which is handled in next code block.
+/system/bin/insmod /lib/modules/bcmdhd.ko ${BCM4334_FLAGS} 
+
+setprop wlan.driver.status ok

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Subsystem xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../Schemas/Subsystem.xsd" Name="AUDIENCE" Type="AUDIENCE" Endianness="Little">
+    <ComponentLibrary>
+        <ComponentType Name="PATH_TYPE">
+            <IntegerParameter Name="VOLUME"  Size="8" Signed="false" Min="0" Max="255" Mapping="Volume"/>
+        </ComponentType>
+        <ComponentType Name="CONNECTION_POINT_TYPE">
+            <Component Name="PATH" Type="PATH_TYPE"/>
+        </ComponentType>
+    </ComponentLibrary>
+    <InstanceDefinition>
+        <ParameterBlock Name="CONFIGURATION" Mapping="Config">
+            <BooleanParameter Name="KEEP_AWAKE"/>
+            <StringParameter Name="PRESET_FILE" MaxLength="256"/>
+        </ParameterBlock>
+        <ParameterBlock Name="ROUTING" Mapping="Mixing:6">
+            <BooleanParameter Name="PLAYBACK_DL_MIXING"/>
+            <BooleanParameter Name="VOICE_CALL_RECORD"/>
+        </ParameterBlock>
+        <ParameterBlock Name="PORTS">
+            <ParameterBlock Name="A">
+                <Component Name="TX" Type="CONNECTION_POINT_TYPE" Mapping="PathId:6"/>
+            </ParameterBlock>
+        </ParameterBlock>
+    </InstanceDefinition>
+</Subsystem>
